@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Grynx Store</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <!-- Снег -->
+  <div class="snow" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="garland" aria-hidden="true"></div>
+
+    <div class="brandRow">
+      <div class="brand">
+        <div class="logo">G</div>
+        <div class="brandText">
+          <div class="brandName">Grynx Store</div>
+          <div class="brandTag">🎄 Новогодние цены • Быстрая выдача</div>
+        </div>
+      </div>
+
+      <button id="lang" class="lang">RU</button>
+    </div>
+
+    <div class="searchRow">
+      <div class="searchWrap">
+        <span class="searchIcon">🔎</span>
+        <input id="q" class="search" placeholder="Я ищу..." />
+        <button id="clear" class="clear" title="Очистить">✖</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="manager" class="btn primary">✉️ Написать менеджеру</button>
+      <button id="orders" class="btn ghost">🧾 Мои заказы</button>
+      <button id="discount" class="btn ghost">🎁 Скидка - 10%</button>
+    </div>
+
+    <div class="nav">
+      <div class="navTitle" id="navTitle">Категории</div>
+      <div class="chips" id="chips"></div>
+      <div class="subchips" id="subchips"></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <div class="heroCard">
+        <div class="heroLeft">
+          <div class="heroTitle" id="heroTitle">РП Проекты</div>
+          <div class="heroSub" id="heroSub">Выбери сервер и покупай вирты</div>
+        </div>
+        <div class="heroRight">
+          <div class="badge">🎅 -10%</div>
+          <div class="mini">24/7</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" id="grid"></section>
+
+    <div class="footerNote" id="footerNote">
+      Нажимая “Купить”, ты создаёшь заявку в боте.
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
