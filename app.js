@@ -214,3 +214,68 @@ $grid.addEventListener("click", (e) => {
 });
 
 renderAll();
+
+
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// Добавление товара в корзину
+function addToCart(productId) {
+  const product = products.find(p => p.id === productId);
+  if (product) {
+    cart.push(product);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartUI();
+  }
+}
+
+// Обновление отображения корзины
+function updateCartUI() {
+  const cartItems = document.getElementById('cart-items');
+  cartItems.innerHTML = '';
+
+  cart.forEach(item => {
+    const div = document.createElement('div');
+    div.textContent = `${item.name} - ${item.price} ₽`;
+    cartItems.appendChild(div);
+  });
+
+  const checkoutBtn = document.getElementById('checkout-btn');
+  const cartContainer = document.getElementById('cart');
+  if (cart.length > 0) {
+    checkoutBtn.style.display = 'block';
+    cartContainer.style.display = 'block';
+  } else {
+    cartContainer.style.display = 'none';
+  }
+}
+
+// Имитируем оплату
+function checkout() {
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const cardNumber = prompt('Введите номер карты для оплаты:');
+  if (cardNumber) {
+    alert(`Оплата принята. Сумма: ${total} ₽. Отправьте квитанцию менеджеру.`);
+    // Отправка квитанции менеджеру
+    sendReceiptToManager(total);
+  }
+}
+
+// Отправка квитанции
+function sendReceiptToManager(total) {
+  const payload = {
+    cart: cart,
+    total: total,
+    user_id: 12345 // Пример user_id
+  };
+  console.log('Отправка квитанции:', payload);
+  // Дальше отправка данных в Telegram бота
+}
+
+// Пример товаров
+const products = [
+  { id: 1, name: '5000 очков Steam', price: 70, category: 'steam' },
+  { id: 2, name: '50 Telegram Stars', price: 45, category: 'telegram' }
+];
+
+// Инициализация
+updateCartUI();

@@ -1,73 +1,55 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Grynx Store</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-</head>
-<body>
-  <!-- Снегопад -->
-  <div class="snow" aria-hidden="true"></div>
-
-  <header class="top">
-    <div class="garland" aria-hidden="true"></div>
-
-    <div class="brandRow">
-      <div class="brand">
-        <div class="logo">G</div>
-        <div class="brandText">
-          <div class="brandName">Grynx Store</div>
-          <div class="brandTag">🎄 Новогодние цены • Быстрая выдача</div>
+<!-- Главная -->
+<main class="main">
+    <section class="categories">
+        <h2>Главная</h2>
+        <div class="categories-list">
+            <div class="category-card" onclick="filterCategory('steam')">
+                <img src="steam-logo.png" alt="Steam" />
+                <p>Steam</p>
+            </div>
+            <div class="category-card" onclick="filterCategory('telegram')">
+                <img src="telegram-logo.png" alt="Telegram" />
+                <p>Telegram</p>
+            </div>
+            <!-- Добавь остальные категории -->
         </div>
-      </div>
-
-      <button id="lang" class="lang">RU</button>
-    </div>
-
-    <div class="searchRow">
-      <div class="searchWrap">
-        <span class="searchIcon">🔎</span>
-        <input id="q" class="search" placeholder="Я ищу..." />
-        <button id="clear" class="clear" title="Очистить">✖</button>
-      </div>
-    </div>
-
-    <div class="actions">
-      <button id="manager" class="btn primary">✉️ Написать менеджеру</button>
-      <button id="orders" class="btn ghost">🧾 Мои заказы</button>
-      <button id="discount" class="btn ghost">🎁 Скидка - 10%</button>
-    </div>
-
-    <div class="nav">
-      <div class="navTitle" id="navTitle">Категории</div>
-      <div class="chips" id="chips"></div>
-      <div class="subchips" id="subchips"></div>
-    </div>
-  </header>
-
-  <main class="main">
-    <section class="hero">
-      <div class="heroCard">
-        <div class="heroLeft">
-          <div class="heroTitle" id="heroTitle">РП Проекты</div>
-          <div class="heroSub" id="heroSub">Выбери сервер и покупай вирты</div>
-        </div>
-        <div class="heroRight">
-          <div class="badge">🎅 -10%</div>
-          <div class="mini">24/7</div>
-        </div>
-      </div>
     </section>
 
-    <section class="grid" id="grid"></section>
+    <!-- Товары -->
+    <section class="products" id="products">
+        <!-- Пример карточки товара -->
+        <div class="product-card" id="product-1">
+            <div class="product-image">
+                <img src="steam-item.png" alt="Steam Items" />
+            </div>
+            <div class="product-details">
+                <h3>5000 очков Steam</h3>
+                <p>Цена: 70 ₽</p>
+                <div class="product-btns">
+                    <button class="add-to-cart" onclick="addToCart(1)">В корзину</button>
+                </div>
+            </div>
+        </div>
 
-    <div class="footerNote" id="footerNote">
-      Нажимая “Купить”, ты создаёшь заявку в боте.
+        <div class="product-card" id="product-2">
+            <div class="product-image">
+                <img src="telegram-item.png" alt="Telegram Stars" />
+            </div>
+            <div class="product-details">
+                <h3>50 Telegram Stars</h3>
+                <p>Цена: 45 ₽</p>
+                <div class="product-btns">
+                    <button class="add-to-cart" onclick="addToCart(2)">В корзину</button>
+                </div>
+            </div>
+        </div>
+        <!-- Другие товары -->
+    </section>
+
+    <!-- Корзина -->
+    <div id="cart">
+        <h3>Корзина</h3>
+        <div id="cart-items"></div>
+        <button id="checkout-btn" onclick="checkout()">Оплатить</button>
     </div>
-  </main>
-
-  <script src="app.js"></script>
-</body>
-</html>
+</main>
