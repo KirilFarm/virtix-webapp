@@ -1,55 +1,168 @@
-<!-- Главная -->
-<main class="main">
-    <section class="categories">
-        <h2>Главная</h2>
-        <div class="categories-list">
-            <div class="category-card" onclick="filterCategory('steam')">
-                <img src="steam-logo.png" alt="Steam" />
-                <p>Steam</p>
-            </div>
-            <div class="category-card" onclick="filterCategory('telegram')">
-                <img src="telegram-logo.png" alt="Telegram" />
-                <p>Telegram</p>
-            </div>
-            <!-- Добавь остальные категории -->
-        </div>
-    </section>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Grynx Store — Mini App</title>
+  <style>
+    :root{--bg:#0f1720;--card:#111827;--accent:#2b6ef6;--muted:#9ca3af;--white:#e6eef8}
+    body{margin:0;background:linear-gradient(180deg,#071019 0%, #0f1720 100%);font-family:Inter,Segoe UI,Arial;color:var(--white)}
+    header{padding:18px 16px;display:flex;align-items:center;gap:12px}
+    .logo{font-weight:700;font-size:18px}
+    .container{padding:8px 12px 80px}
+    .carousel{height:140px;background:linear-gradient(90deg,#1f2937,#111827);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--muted);margin-bottom:14px}
+    .section-title{font-weight:600;margin:8px 4px;color:#fff}
+    .grid{display:flex;gap:10px;flex-wrap:wrap}
+    .icon-card{width:80px;height:80px;border-radius:14px;background:var(--card);display:flex;align-items:center;justify-content:center;flex-direction:column;color:var(--muted)}
+    .product-card{width:calc(50% - 8px);background:var(--card);border-radius:12px;padding:12px;margin-top:12px}
+    .product-title{font-weight:600;margin-bottom:6px}
+    .price{color:var(--accent);font-weight:700}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:#fff;text-decoration:none;margin-top:10px}
+    .cart-btn{position:fixed;left:12px;bottom:12px;padding:10px 12px;border-radius:12px;background:#0ea5a5;color:#001}
+    .bottom-bar{position:fixed;left:0;right:0;bottom:0;background:rgba(0,0,0,0.35);padding:10px 12px;text-align:center;color:var(--muted)}
+    .cart-list{background:var(--card);padding:10px;border-radius:10px;margin-top:10px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Grynx Store</div>
+  </header>
 
-    <!-- Товары -->
-    <section class="products" id="products">
-        <!-- Пример карточки товара -->
-        <div class="product-card" id="product-1">
-            <div class="product-image">
-                <img src="steam-item.png" alt="Steam Items" />
-            </div>
-            <div class="product-details">
-                <h3>5000 очков Steam</h3>
-                <p>Цена: 70 ₽</p>
-                <div class="product-btns">
-                    <button class="add-to-cart" onclick="addToCart(1)">В корзину</button>
-                </div>
-            </div>
-        </div>
+  <div class="container">
+    <div class="carousel">Banner / Carousel — Telegram Stars</div>
 
-        <div class="product-card" id="product-2">
-            <div class="product-image">
-                <img src="telegram-item.png" alt="Telegram Stars" />
-            </div>
-            <div class="product-details">
-                <h3>50 Telegram Stars</h3>
-                <p>Цена: 45 ₽</p>
-                <div class="product-btns">
-                    <button class="add-to-cart" onclick="addToCart(2)">В корзину</button>
-                </div>
-            </div>
-        </div>
-        <!-- Другие товары -->
-    </section>
-
-    <!-- Корзина -->
-    <div id="cart">
-        <h3>Корзина</h3>
-        <div id="cart-items"></div>
-        <button id="checkout-btn" onclick="checkout()">Оплатить</button>
+    <div class="section-title">Главная</div>
+    <div class="grid" id="icons">
+      <!-- icon tiles like on screenshot -->
     </div>
-</main>
+
+    <div class="section-title">Популярное</div>
+    <div id="products" class="grid">
+      <!-- product cards rendered by JS -->
+    </div>
+
+    <div id="cart" style="display:none">
+      <div class="section-title">Корзина</div>
+      <div class="cart-list" id="cart-list"></div>
+      <div style="margin-top:8px;">
+        <button id="checkout" class="btn">Оформить заказ</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="cart-btn" id="toggle-cart">Корзина 🛒 (<span id="cart-count">0</span>)</button>
+  <div class="bottom-bar">@GrynxStoreBot</div>
+
+  <script>
+    // Пример каталога (в реале — загрузите с сервера)
+    const PRODUCTS = [
+      {id:1, title:"5000 очков Steam", price:70, currency:"₴"},
+      {id:2, title:"50 Telegram Stars", price:45, currency:"₴"},
+      {id:3, title:"Standoff-2 1000 coins", price:120, currency:"₴"},
+      {id:4, title:"War Thunder Bundle", price:90, currency:"₴"}
+    ];
+
+    const cart = [];
+
+    function renderIcons(){
+      const icons = document.getElementById("icons");
+      const names = ["Standoff-2","War Thunder","Steam","Telegram"];
+      names.forEach(n=>{
+        const el = document.createElement("div");
+        el.className = "icon-card";
+        el.innerHTML = `<div style="font-size:13px">${n}</div>`;
+        icons.appendChild(el);
+      });
+    }
+
+    function renderProducts(){
+      const box = document.getElementById("products");
+      PRODUCTS.forEach(p=>{
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-title">${p.title}</div>
+          <div>${p.description || ""}</div>
+          <div class="price">${p.price} ${p.currency}</div>
+          <button class="btn" onclick="addToCart(${p.id})">В корзину</button>
+        `;
+        box.appendChild(card);
+      });
+    }
+
+    function addToCart(id){
+      const p = PRODUCTS.find(x=>x.id===id);
+      if(!p) return;
+      const ex = cart.find(x=>x.id===id);
+      if(ex) ex.qty++;
+      else cart.push({id:p.id, title:p.title, price:p.price, qty:1});
+      updateCartUI();
+    }
+
+    function updateCartUI(){
+      const cnt = cart.reduce((s,i)=>s+i.qty,0);
+      document.getElementById("cart-count").innerText = cnt;
+      const list = document.getElementById("cart-list");
+      list.innerHTML = "";
+      if(cart.length===0) list.innerHTML = "<div style='color:#9ca3af'>Корзина пуста</div>";
+      else {
+        cart.forEach(it=>{
+          const row = document.createElement("div");
+          row.style.marginBottom="8px";
+          row.innerHTML = `${it.title} — ${it.qty} × ${it.price} = ${it.qty * it.price}`;
+          list.appendChild(row);
+        });
+      }
+    }
+
+    document.getElementById("toggle-cart").addEventListener("click", ()=>{
+      const el = document.getElementById("cart");
+      el.style.display = (el.style.display==="none" || el.style.display==="") ? "block" : "none";
+    });
+
+    document.getElementById("checkout").addEventListener("click", async ()=>{
+      if(cart.length===0){ alert("Корзина пуста"); return; }
+      // Получаем данные пользователя из Telegram WebApp (если открыто в Telegram)
+      const tg = window.Telegram?.WebApp;
+      let user_id = null;
+      let user_name = "Пользователь";
+      if(tg && tg.initDataUnsafe && tg.initDataUnsafe.user){
+        user_id = tg.initDataUnsafe.user.id;
+        user_name = tg.initDataUnsafe.user.first_name || user_name;
+      } else {
+        // если не внутри Telegram — попросим ввести id (для теста)
+        user_id = prompt("Введите ваш Telegram ID для теста (user_id):");
+        if(!user_id) return;
+      }
+
+      const total = cart.reduce((s,i)=>s + i.qty * i.price, 0);
+      const payload = { user_id: Number(user_id), user_name, items: cart, total };
+
+      try {
+        const resp = await fetch("/api/order", {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify(payload)
+        });
+        const data = await resp.json();
+        if(data.ok){
+          alert("Заказ отправлен! Спасибо.");
+          // если внутри WebApp, можно закрыть
+          if(window.Telegram?.WebApp) window.Telegram.WebApp.close();
+          cart.length = 0;
+          updateCartUI();
+        } else {
+          alert("Ошибка при отправке заказа: " + JSON.stringify(data));
+        }
+      } catch (err) {
+        alert("Ошибка сети: " + err);
+      }
+    });
+
+    // init
+    renderIcons();
+    renderProducts();
+    updateCartUI();
+  </script>
+</body>
+</html>
